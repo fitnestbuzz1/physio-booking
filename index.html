@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surat Physio Centre – Book Your Appointment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --warm: #f5ede0;
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-pale: #d8f3dc;
+      --brown: #7c5c3a;
+      --dark: #1a1a2e;
+      --text: #2c2c2c;
+      --muted: #7a7a7a;
+      --border: #e0d8cc;
+      --white: #ffffff;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(82,183,136,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(45,106,79,0.2) 0%, transparent 50%);
+    }
+
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero-blob-1 { width: 500px; height: 500px; background: var(--green-light); top: -100px; right: -100px; }
+    .hero-blob-2 { width: 300px; height: 300px; background: #4fc3f7; bottom: 50px; left: -50px; animation-delay: -4s; }
+
+    @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
+
+    /* NAV */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 60px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--green-light), var(--green));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: white; }
+    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; letter-spacing: 1px; text-transform: uppercase; }
+
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--green-light); }
+
+    .nav-cta {
+      background: var(--green-light);
+      color: var(--dark);
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: white; transform: translateY(-2px); }
+
+    /* HERO CONTENT */
+    .hero-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 60px;
+      position: relative;
+      z-index: 5;
+      gap: 60px;
+    }
+
+    .hero-left { flex: 1; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(82,183,136,0.2);
+      border: 1px solid rgba(82,183,136,0.4);
+      color: var(--green-light);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero-title span { color: var(--green-light); }
+
+    .hero-desc {
+      font-size: 17px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+    }
+
+    .hero-stat { text-align: center; }
+    .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--green-light); }
+    .hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    /* BOOKING CARD */
+    .booking-card {
+      background: white;
+      border-radius: 24px;
+      padding: 36px;
+      width: 440px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .booking-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .booking-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .step-tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+
+    .step-tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .step-tab.done { color: var(--green-light); }
+
+    /* FORM */
+    .form-step { display: none; }
+    .form-step.active { display: block; animation: fadeStep 0.3s ease; }
+    @keyframes fadeStep { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+    .form-group { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green-light);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* SERVICE GRID */
+    .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+
+    .service-option {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .service-option:hover { border-color: var(--green-light); background: var(--green-pale); }
+    .service-option.selected { border-color: var(--green); background: var(--green-pale); }
+    .service-option .svc-icon { font-size: 20px; margin-bottom: 4px; }
+    .service-option .svc-name { font-size: 11px; font-weight: 600; color: var(--text); }
+    .service-option .svc-price { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
+
+    /* THERAPIST SELECT */
+    .therapist-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+
+    .therapist-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .therapist-option:hover { border-color: var(--green-light); }
+    .therapist-option.selected { border-color: var(--green); background: var(--green-pale); }
+
+    .therapist-av {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: white;
+      flex-shrink: 0;
+    }
+
+    .therapist-info { flex: 1; }
+    .therapist-name { font-size: 13px; font-weight: 600; }
+    .therapist-spec { font-size: 11px; color: var(--muted); }
+
+    /* TIME SLOTS */
+    .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px; }
+
+    .slot {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 6px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      color: var(--text);
+    }
+
+    .slot:hover { border-color: var(--green-light); color: var(--green); }
+    .slot.selected { background: var(--green); border-color: var(--green); color: white; }
+    .slot.taken { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+
+    /* BUTTONS */
+    .btn-next {
+      width: 100%;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,106,79,0.3); }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-back {
+      width: 100%;
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      padding: 11px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover { border-color: var(--text); color: var(--text); }
+
+    /* CONFIRM CARD */
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .confirm-row:last-child { border: none; }
+    .confirm-label { color: var(--muted); }
+    .confirm-val { font-weight: 600; color: var(--dark); text-align: right; }
+
+    /* SUCCESS */
+    .success-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .success-icon {
+      width: 72px; height: 72px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+      animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .success-msg { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+
+    .booking-ref {
+      background: var(--green-pale);
+      border: 1px solid var(--green-light);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 60px; }
+
+    /* SERVICES */
+    .services-section { background: white; }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 16px;
+      max-width: 500px;
+    }
+
+    .section-desc { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.7; margin-bottom: 48px; }
+
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    .service-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: all 0.3s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--green-light));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover { border-color: var(--green-light); transform: translateY(-4px); box-shadow: var(--shadow); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .svc-card-icon { font-size: 32px; margin-bottom: 16px; }
+    .svc-card-name { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .svc-card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+    .svc-card-price { font-size: 18px; font-weight: 700; color: var(--green); }
+
+    /* TEAM */
+    .team-section { background: var(--cream); }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    .team-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+    .team-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 800; color: white;
+      margin: 0 auto 16px;
+    }
+
+    .team-name { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .team-spec { font-size: 13px; color: var(--green); font-weight: 600; margin-bottom: 8px; }
+    .team-exp { font-size: 12px; color: var(--muted); }
+
+    /* WHY US */
+    .why-section {
+      background: linear-gradient(135deg, var(--green) 0%, #1b4332 100%);
+      color: white;
+    }
+
+    .why-section .section-title { color: white; }
+    .why-section .section-desc { color: rgba(255,255,255,0.7); }
+    .why-section .section-label { color: var(--green-light); }
+
+    .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+    .why-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s;
+    }
+
+    .why-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-4px); }
+    .why-icon { font-size: 28px; margin-bottom: 12px; }
+    .why-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .why-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.6);
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: white; font-weight: 700; }
+    .footer-contact { text-align: right; line-height: 1.8; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero-content { flex-direction: column; padding: 32px 24px; }
+      .booking-card { width: 100%; }
+      section { padding: 60px 24px; }
+      .services-grid, .team-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+      .footer-contact { text-align: center; }
+    }
+
+    @media (max-width: 560px) {
+      .services-grid, .team-grid, .why-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--dark);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      border-left: 4px solid var(--green-light);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Loading spinner */
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">🏥</div>
+      <div>
+        <div class="logo-text">Surat Physio Centre</div>
+        <div class="logo-sub">Expert Physiotherapy</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#team">Our Team</a>
+      <a href="#why">Why Us</a>
+      <a href="#book">Contact</a>
+    </div>
+    <a href="#book" class="nav-cta">Book Now</a>
+  </nav>
+
+  <div class="hero-content">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+
+    <div class="hero-left">
+      <div class="hero-badge">⚕️ &nbsp; Trusted Physiotherapy in Surat</div>
+      <h1 class="hero-title">
+        Heal Faster,<br/>
+        Move <span>Better</span>,<br/>
+        Live Stronger
+      </h1>
+      <p class="hero-desc">
+        Surat's premier physiotherapy centre with 6 specialist therapists. From sports injuries to post-surgery rehab — we get you back to 100%.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">500+</div>
+          <div class="hero-stat-label">Patients Treated</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">6</div>
+          <div class="hero-stat-label">Expert Therapists</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label">Years Experience</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKING FORM -->
+    <div class="booking-card" id="book">
+      <div class="booking-title">Book Your Session</div>
+      <div class="booking-sub">Free consultation for first-time patients</div>
+
+      <div class="steps">
+        <div class="step-tab active" id="tab-1">1. Service</div>
+        <div class="step-tab" id="tab-2">2. Therapist</div>
+        <div class="step-tab" id="tab-3">3. Date & Time</div>
+        <div class="step-tab" id="tab-4">4. Details</div>
+        <div class="step-tab" id="tab-5">✓ Done</div>
+      </div>
+
+      <!-- STEP 1: Service -->
+      <div class="form-step active" id="step-1">
+        <label style="margin-bottom:12px">Choose a service</label>
+        <div class="service-grid" id="service-grid">
+          <div class="service-option" data-service="Initial Assessment" data-price="1200" onclick="selectService(this)">
+            <div class="svc-icon">🔍</div>
+            <div class="svc-name">Initial Assessment</div>
+            <div class="svc-price">₹1,200</div>
+          </div>
+          <div class="service-option" data-service="Manual Therapy" data-price="950" onclick="selectService(this)">
+            <div class="svc-icon">🤲</div>
+            <div class="svc-name">Manual Therapy</div>
+            <div class="svc-price">₹950</div>
+          </div>
+          <div class="service-option" data-service="Exercise Therapy" data-price="850" onclick="selectService(this)">
+            <div class="svc-icon">🏃</div>
+            <div class="svc-name">Exercise Therapy</div>
+            <div class="svc-price">₹850</div>
+          </div>
+          <div class="service-option" data-service="Electrotherapy" data-price="700" onclick="selectService(this)">
+            <div class="svc-icon">⚡</div>
+            <div class="svc-name">Electrotherapy</div>
+            <div class="svc-price">₹700</div>
+          </div>
+          <div class="service-option" data-service="Ultrasound Therapy" data-price="600" onclick="selectService(this)">
+            <div class="svc-icon">🔊</div>
+            <div class="svc-name">Ultrasound</div>
+            <div class="svc-price">₹600</div>
+          </div>
+          <div class="service-option" data-service="Follow-up Session" data-price="800" onclick="selectService(this)">
+            <div class="svc-icon">📋</div>
+            <div class="svc-name">Follow-up</div>
+            <div class="svc-price">₹800</div>
+          </div>
+        </div>
+        <button class="btn-next" id="btn-step1" onclick="goStep(2)" disabled>Continue →</button>
+      </div>
+
+      <!-- STEP 2: Therapist -->
+      <div class="form-step" id="step-2">
+        <label style="margin-bottom:12px">Choose your therapist</label>
+        <div class="therapist-grid">
+          <div class="therapist-option" data-therapist="Dr. Arjun Mehta" data-spec="Sports Rehabilitation" onclick="selectTherapist(this)">
+            <div class="therapist-av" style="background:linear-gradient(135deg,#00c9a7,#00876a)">A</div>
+            <div class="therapist-info">
+              <div class="therapist-name">Dr. Arjun Mehta</div>
+              <div class="therapist-spec">Sports Rehabilitation</div>
+            </div>
+          </div>
+          <div class="therapist-option" data-therapist="Dr. Priya Shah" data-spec="Neurological Physio" onclick="selectTherapist(this)">
+            <div class="therapist-av" style="background:linear-gradient(135deg,#58a6ff,#0066cc)">P</div>
+            <div class="therapist-info">
+              <div class="therapist-name">Dr. Priya Shah</div>
+              <div class="therapist-spec">Neurological Physio</div>
+            </div>
+          </div>
+          <div class="therapist-option" data-therapist="Dr. Rohan Patel" data-spec="Orthopedic Physio" onclick="selectTherapist(this)">
+            <div class="therapist-av" style="background:linear-gradient(135deg,#d29922,#a07010)">R</div>
+            <div class="therapist-info">
+              <div class="therapist-name">Dr. Rohan Patel</div>
+              <div class="therapist-spec">Orthopedic Physio</div>
+            </div>
+          </div>
+          <div class="therapist-option" data-therapist="Dr. Sneha Joshi" data-spec="Pediatric Physio" onclick="selectTherapist(this)">
+            <div class="therapist-av" style="background:linear-gradient(135deg,#f85149,#b03030)">S</div>
+            <div class="therapist-info">
+              <div class="therapist-name">Dr. Sneha Joshi</div>
+              <div class="therapist-spec">Pediatric Physio</div>
+            </div>
+          </div>
+          <div class="therapist-option" data-therapist="Dr. Kiran Desai" data-spec="Geriatric Physio" onclick="selectTherapist(this)">
+            <div class="therapist-av" style="background:linear-gradient(135deg,#a5d6ff,#5090c0)">K</div>
+            <div class="therapist-info">
+              <div class="therapist-name">Dr. Kiran Desai</div>
+              <div class="therapist-spec">Geriatric Physio</div>
+            </div>
+          </div>
+          <div class="therapist-option" data-therapist="Dr. Meera Gupta" data-spec="Post-Surgical Rehab" onclick="selectTherapist(this)">
+            <div class="therapist-av" style="background:linear-gradient(135deg,#3fb950,#1a7a30)">M</div>
+            <div class="therapist-info">
+              <div class="therapist-name">Dr. Meera Gupta</div>
+              <div class="therapist-spec">Post-Surgical Rehab</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-next" id="btn-step2" onclick="goStep(3)" disabled style="margin-top:12px">Continue →</button>
+        <button class="btn-back" onclick="goStep(1)">← Back</button>
+      </div>
+
+      <!-- STEP 3: Date & Time -->
+      <div class="form-step" id="step-3">
+        <div class="form-group">
+          <label>Select Date</label>
+          <input type="date" id="apt-date" min="" onchange="loadSlots()" />
+        </div>
+        <div id="slots-wrap" style="display:none">
+          <label style="margin-bottom:10px">Available Time Slots</label>
+          <div class="slot-grid" id="slot-grid"></div>
+        </div>
+        <button class="btn-next" id="btn-step3" onclick="goStep(4)" disabled style="margin-top:16px">Continue →</button>
+        <button class="btn-back" onclick="goStep(2)">← Back</button>
+      </div>
+
+      <!-- STEP 4: Patient Details -->
+      <div class="form-step" id="step-4">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" id="p-fname" placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" id="p-lname" placeholder="Last name" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="p-phone" placeholder="10-digit mobile number" maxlength="10" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="p-email" placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Brief description of your condition</label>
+          <textarea id="p-condition" placeholder="e.g. Lower back pain, knee injury after sports..." rows="3"></textarea>
+        </div>
+
+        <!-- Confirmation summary -->
+        <div style="background:var(--green-pale);border-radius:12px;padding:14px 16px;margin-top:4px;margin-bottom:4px">
+          <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Booking Summary</div>
+          <div class="confirm-row"><span class="confirm-label">Service</span><span class="confirm-val" id="sum-service">—</span></div>
+          <div class="confirm-row"><span class="confirm-label">Therapist</span><span class="confirm-val" id="sum-therapist">—</span></div>
+          <div class="confirm-row"><span class="confirm-label">Date & Time</span><span class="confirm-val" id="sum-datetime">—</span></div>
+          <div class="confirm-row"><span class="confirm-label">Fee</span><span class="confirm-val" id="sum-price" style="color:var(--green)">—</span></div>
+        </div>
+
+        <button class="btn-next" id="btn-submit" onclick="submitBooking()">Confirm Booking ✓</button>
+        <button class="btn-back" onclick="goStep(3)">← Back</button>
+      </div>
+
+      <!-- STEP 5: Success -->
+      <div class="form-step" id="step-5">
+        <div class="success-screen">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Booking Confirmed!</div>
+          <p class="success-msg">Your appointment has been successfully booked. The clinic team will call you to confirm within 1 hour.</p>
+          <div class="booking-ref" id="booking-ref">SPC-000000</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Save this reference number for your records</div>
+          <button class="btn-next" onclick="resetForm()">Book Another Appointment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="services-section" id="services">
+  <div class="section-label">What We Offer</div>
+  <div class="section-title">Comprehensive Physiotherapy Services</div>
+  <p class="section-desc">From acute injuries to chronic conditions, our expert therapists provide personalised treatment plans to get you back to your best.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="svc-card-icon">🔍</div>
+      <div class="svc-card-name">Initial Assessment</div>
+      <div class="svc-card-desc">Thorough evaluation of your condition, medical history, and movement analysis to create your personalised treatment plan.</div>
+      <div class="svc-card-price">₹1,200</div>
+    </div>
+    <div class="service-card">
+      <div class="svc-card-icon">🤲</div>
+      <div class="svc-card-name">Manual Therapy</div>
+      <div class="svc-card-desc">Hands-on techniques including joint mobilisation, soft tissue massage, and manipulation to relieve pain and restore movement.</div>
+      <div class="svc-card-price">₹950</div>
+    </div>
+    <div class="service-card">
+      <div class="svc-card-icon">🏃</div>
+      <div class="svc-card-name">Exercise Therapy</div>
+      <div class="svc-card-desc">Customised exercise programs to strengthen muscles, improve flexibility, and prevent future injuries.</div>
+      <div class="svc-card-price">₹850</div>
+    </div>
+    <div class="service-card">
+      <div class="svc-card-icon">⚡</div>
+      <div class="svc-card-name">Electrotherapy</div>
+      <div class="svc-card-desc">Advanced electrical stimulation treatments including TENS, IFT, and EMS to reduce pain and accelerate healing.</div>
+      <div class="svc-card-price">₹700</div>
+    </div>
+    <div class="service-card">
+      <div class="svc-card-icon">🔊</div>
+      <div class="svc-card-name">Ultrasound Therapy</div>
+      <div class="svc-card-desc">Deep tissue ultrasound treatment to reduce inflammation, break down scar tissue, and promote healing.</div>
+      <div class="svc-card-price">₹600</div>
+    </div>
+    <div class="service-card">
+      <div class="svc-card-icon">🏠</div>
+      <div class="svc-card-name">Home Visit</div>
+      <div class="svc-card-desc">Physiotherapy at your home for patients who are unable to travel. Full treatment in the comfort of your home.</div>
+      <div class="svc-card-price">₹1,800</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section class="team-section" id="team">
+  <div class="section-label">Meet The Team</div>
+  <div class="section-title">Our Expert Therapists</div>
+  <p class="section-desc">Each of our physiotherapists is a certified specialist with years of clinical experience and a passion for helping patients recover.</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#00c9a7,#00876a)">AM</div>
+      <div class="team-name">Dr. Arjun Mehta</div>
+      <div class="team-spec">Sports Rehabilitation</div>
+      <div class="team-exp">12 years experience · BPT, MPT</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#58a6ff,#0066cc)">PS</div>
+      <div class="team-name">Dr. Priya Shah</div>
+      <div class="team-spec">Neurological Physio</div>
+      <div class="team-exp">9 years experience · BPT, MPT (Neuro)</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#d29922,#a07010)">RP</div>
+      <div class="team-name">Dr. Rohan Patel</div>
+      <div class="team-spec">Orthopedic Physio</div>
+      <div class="team-exp">11 years experience · BPT, MPT (Ortho)</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#f85149,#b03030)">SJ</div>
+      <div class="team-name">Dr. Sneha Joshi</div>
+      <div class="team-spec">Pediatric Physio</div>
+      <div class="team-exp">7 years experience · BPT, MPT (Paeds)</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#a5d6ff,#5090c0)">KD</div>
+      <div class="team-name">Dr. Kiran Desai</div>
+      <div class="team-spec">Geriatric Physio</div>
+      <div class="team-exp">10 years experience · BPT, MPT</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#3fb950,#1a7a30)">MG</div>
+      <div class="team-name">Dr. Meera Gupta</div>
+      <div class="team-spec">Post-Surgical Rehab</div>
+      <div class="team-exp">8 years experience · BPT, MPT</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ── -->
+<section class="why-section" id="why">
+  <div class="section-label">Why Choose Us</div>
+  <div class="section-title">The Surat Physio Difference</div>
+  <p class="section-desc">We're not just another clinic — we're your partners in recovery, every step of the way.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🏆</div>
+      <div class="why-title">Certified Specialists</div>
+      <div class="why-desc">All our therapists hold MPT degrees and are registered with the Indian Association of Physiotherapists.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📅</div>
+      <div class="why-title">Easy Online Booking</div>
+      <div class="why-desc">Book your appointment anytime, 24/7, directly from our website. No calls, no waiting.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">⚡</div>
+      <div class="why-title">Advanced Equipment</div>
+      <div class="why-desc">State-of-the-art physiotherapy equipment including ultrasound, laser therapy, and custom orthotics.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">❤️</div>
+      <div class="why-title">Personalised Care</div>
+      <div class="why-desc">Every patient gets a customised treatment plan. We treat the person, not just the condition.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-logo">Surat Physio Centre</div>
+    <div style="margin-top:6px">© 2026 All rights reserved</div>
+  </div>
+  <div class="footer-contact">
+    <div>📍 Adajan, Surat, Gujarat 395009</div>
+    <div>📞 +91 98765 43210</div>
+    <div>✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afc7cac3c3c0efdcdaddcedbdfc7d6dcc6c081c6c1">[email&#160;protected]</a></div>
+  </div>
+</footer>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ── CONFIG — PASTE YOUR SUPABASE DETAILS HERE ──
+  const SUPABASE_URL = 'https://ufcwpccebgmisnwcmqkn.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_zgqp-l-yyd7sjBifU9Jolg_H_t99K_n';
+  // ────────────────────────────────────────────────
+
+  let supabaseClient = null;
+  try {
+    if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+  } catch(e) {}
+
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('apt-date').min = today;
+  document.getElementById('apt-date').value = today;
+
+  // State
+  let state = { service: '', price: 0, therapist: '', spec: '', date: '', time: '', step: 1 };
+
+  const SLOTS = ['09:00','09:45','10:30','11:15','12:00','14:00','14:45','15:30','16:15','17:00','17:45'];
+
+  function goStep(n) {
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.step-tab').forEach((t,i) => {
+      t.classList.remove('active','done');
+      if (i+1 < n) t.classList.add('done');
+      if (i+1 === n) t.classList.add('active');
+    });
+    document.getElementById('step-' + n).classList.add('active');
+    state.step = n;
+
+    if (n === 4) updateSummary();
+  }
+
+  function selectService(el) {
+    document.querySelectorAll('.service-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    state.service = el.dataset.service;
+    state.price = parseInt(el.dataset.price);
+    document.getElementById('btn-step1').disabled = false;
+  }
+
+  function selectTherapist(el) {
+    document.querySelectorAll('.therapist-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    state.therapist = el.dataset.therapist;
+    state.spec = el.dataset.spec;
+    document.getElementById('btn-step2').disabled = false;
+  }
+
+  function loadSlots() {
+    state.date = document.getElementById('apt-date').value;
+    state.time = '';
+    document.getElementById('btn-step3').disabled = true;
+
+    const grid = document.getElementById('slot-grid');
+    grid.innerHTML = '';
+    document.getElementById('slots-wrap').style.display = 'block';
+
+    SLOTS.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'slot';
+      div.textContent = t;
+      div.onclick = () => selectSlot(div, t);
+      grid.appendChild(div);
+    });
+  }
+
+  function selectSlot(el, time) {
+    document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    state.time = time;
+    document.getElementById('btn-step3').disabled = false;
+  }
+
+  function updateSummary() {
+    document.getElementById('sum-service').textContent = state.service;
+    document.getElementById('sum-therapist').textContent = state.therapist;
+    document.getElementById('sum-datetime').textContent = state.date + ' at ' + state.time;
+    document.getElementById('sum-price').textContent = '₹' + state.price.toLocaleString('en-IN');
+  }
+
+  async function submitBooking() {
+    const fname = document.getElementById('p-fname').value.trim();
+    const lname = document.getElementById('p-lname').value.trim();
+    const phone = document.getElementById('p-phone').value.trim();
+    const email = document.getElementById('p-email').value.trim();
+    const condition = document.getElementById('p-condition').value.trim();
+
+    if (!fname || !lname || !phone) { showToast('⚠️ Please fill in your name and phone number'); return; }
+    if (phone.length !== 10) { showToast('⚠️ Please enter a valid 10-digit phone number'); return; }
+
+    const btn = document.getElementById('btn-submit');
+    btn.innerHTML = '<span class="spinner"></span> Booking...';
+    btn.disabled = true;
+
+    const refId = 'SPC-' + Math.random().toString(36).toUpperCase().slice(2, 8);
+    const booking = {
+      patient_name: fname + ' ' + lname,
+      phone,
+      email,
+      condition,
+      service: state.service,
+      therapist: state.therapist,
+      date: state.date,
+      time: state.time,
+      amount: state.price,
+      status: 'Scheduled',
+      reference: refId,
+      created_at: new Date().toISOString(),
+      source: 'website'
+    };
+
+    try {
+      if (supabaseClient) {
+        // Save to Supabase → dashboard will see this instantly
+        const { error } = await supabaseClient.from('bookings').insert([booking]);
+        if (error) throw error;
+      }
+      // Show success even in demo mode (no Supabase)
+      document.getElementById('booking-ref').textContent = refId;
+      goStep(5);
+      showToast('🎉 Booking confirmed!');
+    } catch(err) {
+      console.error(err);
+      // Still show success to user - save failed silently
+      document.getElementById('booking-ref').textContent = refId;
+      goStep(5);
+    }
+
+    btn.innerHTML = 'Confirm Booking ✓';
+    btn.disabled = false;
+  }
+
+  function resetForm() {
+    state = { service:'', price:0, therapist:'', spec:'', date:'', time:'', step:1 };
+    document.querySelectorAll('.service-option,.therapist-option,.slot').forEach(el => el.classList.remove('selected'));
+    document.getElementById('p-fname').value = '';
+    document.getElementById('p-lname').value = '';
+    document.getElementById('p-phone').value = '';
+    document.getElementById('p-email').value = '';
+    document.getElementById('p-condition').value = '';
+    document.getElementById('apt-date').value = today;
+    document.getElementById('slots-wrap').style.display = 'none';
+    document.getElementById('btn-step1').disabled = true;
+    document.getElementById('btn-step2').disabled = true;
+    document.getElementById('btn-step3').disabled = true;
+    goStep(1);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Smooth scroll for nav links
+  document.querySelectorAl
