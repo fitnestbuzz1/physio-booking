@@ -4,98 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stride Sports & Physiotherapy – Book Your Appointment</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --cream: #faf7f2;
-      --warm: #f5ede0;
       --green: #2d6a4f;
       --green-light: #52b788;
       --green-pale: #d8f3dc;
-      --brown: #7c5c3a;
       --dark: #1a1a2e;
       --text: #2c2c2c;
       --muted: #7a7a7a;
       --border: #e0d8cc;
       --white: #ffffff;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
-      --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: var(--cream);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(135deg, var(--dark) 0%, #16213e 50%, #0f3460 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(82,183,136,0.15) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(45,106,79,0.2) 0%, transparent 50%);
-    }
-
-    .hero-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .hero-blob-1 { width: 500px; height: 500px; background: var(--green-light); top: -100px; right: -100px; }
-    .hero-blob-2 { width: 300px; height: 300px; background: #4fc3f7; bottom: 50px; left: -50px; animation-delay: -4s; }
-
-    @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
+    body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--text); }
 
     /* NAV */
     nav {
-      position: relative;
-      z-index: 10;
+      background: var(--dark);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 24px 60px;
+      padding: 18px 48px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo-icon {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, var(--green-light), var(--green));
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
-
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: white; }
-    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; letter-spacing: 1px; text-transform: uppercase; }
-
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; color: white; font-weight: 700; }
+    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; transition: color 0.2s; }
     .nav-links a:hover { color: var(--green-light); }
-
-    .nav-cta {
+    .nav-btn {
       background: var(--green-light);
       color: var(--dark);
       padding: 10px 22px;
@@ -105,21 +47,18 @@
       text-decoration: none;
       transition: all 0.2s;
     }
-    .nav-cta:hover { background: white; transform: translateY(-2px); }
+    .nav-btn:hover { background: white; }
 
-    /* HERO CONTENT */
-    .hero-content {
-      flex: 1;
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #16213e 60%, #0f3460 100%);
+      min-height: 90vh;
       display: flex;
       align-items: center;
-      padding: 60px;
-      position: relative;
-      z-index: 5;
+      padding: 60px 48px;
       gap: 60px;
     }
-
     .hero-left { flex: 1; }
-
     .hero-badge {
       display: inline-flex;
       align-items: center;
@@ -127,7 +66,7 @@
       background: rgba(82,183,136,0.2);
       border: 1px solid rgba(82,183,136,0.4);
       color: var(--green-light);
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 50px;
       font-size: 12px;
       font-weight: 600;
@@ -135,187 +74,129 @@
       text-transform: uppercase;
       margin-bottom: 24px;
     }
-
     .hero-title {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 5vw, 64px);
+      font-size: clamp(36px, 5vw, 62px);
       font-weight: 900;
       color: white;
       line-height: 1.1;
       margin-bottom: 20px;
     }
-
     .hero-title span { color: var(--green-light); }
-
-    .hero-desc {
-      font-size: 17px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 36px;
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: 32px;
-    }
-
-    .hero-stat { text-align: center; }
-    .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--green-light); }
-    .hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .hero-desc { font-size: 17px; color: rgba(255,255,255,0.65); line-height: 1.7; max-width: 460px; margin-bottom: 36px; }
+    .hero-stats { display: flex; gap: 32px; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--green-light); }
+    .stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
 
     /* BOOKING CARD */
     .booking-card {
       background: white;
       border-radius: 24px;
       padding: 36px;
-      width: 440px;
+      width: 460px;
       flex-shrink: 0;
-      box-shadow: var(--shadow-lg);
-      animation: slideUp 0.6s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
-
-    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-    .booking-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-
+    .booking-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
     .booking-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
 
     /* STEPS */
-    .steps {
-      display: flex;
-      gap: 0;
-      margin-bottom: 28px;
-      border-bottom: 2px solid var(--border);
-    }
-
+    .steps { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
     .step-tab {
       flex: 1;
       text-align: center;
       padding: 10px 4px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--muted);
-      cursor: pointer;
       border-bottom: 2px solid transparent;
       margin-bottom: -2px;
-      transition: all 0.2s;
     }
-
     .step-tab.active { color: var(--green); border-bottom-color: var(--green); }
     .step-tab.done { color: var(--green-light); }
 
-    /* FORM */
-    .form-step { display: none; }
-    .form-step.active { display: block; animation: fadeStep 0.3s ease; }
-    @keyframes fadeStep { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+    /* FORM STEPS */
+    .step { display: none; }
+    .step.active { display: block; }
 
-    .form-group { margin-bottom: 16px; }
-
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-      letter-spacing: 0.3px;
+    /* SERVICE GRID */
+    .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .svc-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
     }
+    .svc-card:hover { border-color: var(--green-light); background: var(--green-pale); }
+    .svc-card.selected { border-color: var(--green); background: var(--green-pale); }
+    .svc-icon { font-size: 22px; margin-bottom: 6px; }
+    .svc-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .svc-price { font-size: 12px; color: var(--green); font-weight: 700; margin-top: 3px; }
 
-    input, select, textarea {
+    /* THERAPIST LIST */
+    .therapist-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; max-height: 320px; overflow-y: auto; }
+    .therapist-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .therapist-card:hover { border-color: var(--green-light); }
+    .therapist-card.selected { border-color: var(--green); background: var(--green-pale); }
+    .t-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: white;
+      flex-shrink: 0;
+    }
+    .t-name { font-size: 13px; font-weight: 600; }
+    .t-spec { font-size: 11px; color: var(--muted); }
+
+    /* DATE & SLOTS */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    input[type="date"], input[type="text"], input[type="tel"], input[type="email"], textarea {
       width: 100%;
       padding: 11px 14px;
-      border: 1.5px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 10px;
       font-size: 14px;
       font-family: 'Outfit', sans-serif;
       color: var(--text);
       background: var(--cream);
-      transition: all 0.2s;
       outline: none;
+      transition: border-color 0.2s;
     }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--green-light);
-      background: white;
-      box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
-    }
-
+    input:focus, textarea:focus { border-color: var(--green-light); background: white; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    /* SERVICE GRID */
-    .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
-
-    .service-option {
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .service-option:hover { border-color: var(--green-light); background: var(--green-pale); }
-    .service-option.selected { border-color: var(--green); background: var(--green-pale); }
-    .service-option .svc-icon { font-size: 20px; margin-bottom: 4px; }
-    .service-option .svc-name { font-size: 11px; font-weight: 600; color: var(--text); }
-    .service-option .svc-price { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
-
-    /* THERAPIST SELECT */
-    .therapist-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
-
-    .therapist-option {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .therapist-option:hover { border-color: var(--green-light); }
-    .therapist-option.selected { border-color: var(--green); background: var(--green-pale); }
-
-    .therapist-av {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 700; color: white;
-      flex-shrink: 0;
-    }
-
-    .therapist-info { flex: 1; }
-    .therapist-name { font-size: 13px; font-weight: 600; }
-    .therapist-spec { font-size: 11px; color: var(--muted); }
-
-    /* TIME SLOTS */
-    .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px; }
-
+    .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
     .slot {
-      border: 1.5px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 8px;
-      padding: 8px 6px;
+      padding: 9px 6px;
       text-align: center;
       cursor: pointer;
       font-size: 12px;
       font-weight: 600;
-      transition: all 0.2s;
       color: var(--text);
+      transition: all 0.15s;
+      user-select: none;
     }
-
     .slot:hover { border-color: var(--green-light); color: var(--green); }
     .slot.selected { background: var(--green); border-color: var(--green); color: white; }
-    .slot.taken { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
 
     /* BUTTONS */
-    .btn-next {
+    .btn-primary {
       width: 100%;
       background: linear-gradient(135deg, var(--green), var(--green-light));
       color: white;
@@ -327,17 +208,15 @@
       cursor: pointer;
       font-family: 'Outfit', sans-serif;
       transition: all 0.2s;
-      margin-top: 8px;
+      margin-top: 4px;
     }
-
-    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,106,79,0.3); }
-    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
     .btn-back {
       width: 100%;
       background: transparent;
       color: var(--muted);
-      border: 1.5px solid var(--border);
+      border: 2px solid var(--border);
       padding: 11px;
       border-radius: 12px;
       font-size: 14px;
@@ -347,202 +226,115 @@
       margin-top: 8px;
       transition: all 0.2s;
     }
-
     .btn-back:hover { border-color: var(--text); color: var(--text); }
 
-    /* CONFIRM CARD */
-    .confirm-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
+    /* SUMMARY BOX */
+    .summary-box {
+      background: var(--green-pale);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
     }
-    .confirm-row:last-child { border: none; }
-    .confirm-label { color: var(--muted); }
-    .confirm-val { font-weight: 600; color: var(--dark); text-align: right; }
+    .summary-label { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .summary-row:last-child { border: none; }
+    .summary-key { color: var(--muted); }
+    .summary-val { font-weight: 600; color: var(--dark); }
 
     /* SUCCESS */
-    .success-screen {
-      text-align: center;
-      padding: 20px 0;
-    }
-
-    .success-icon {
-      width: 72px; height: 72px;
-      background: var(--green-pale);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px;
-      margin: 0 auto 16px;
-      animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
+    .success-wrap { text-align: center; padding: 16px 0; }
+    .success-icon { font-size: 56px; margin-bottom: 16px; animation: pop 0.4s ease; }
     @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
-
-    .success-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 8px;
-    }
-
-    .success-msg { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-
-    .booking-ref {
+    .success-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .success-msg { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+    .ref-box {
       background: var(--green-pale);
       border: 1px solid var(--green-light);
       border-radius: 10px;
-      padding: 12px 16px;
+      padding: 12px;
       font-family: monospace;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--green);
-      letter-spacing: 2px;
-      margin-bottom: 20px;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
     }
+    .ref-hint { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
 
-    /* ── SECTIONS ── */
-    section { padding: 80px 60px; }
+    /* SECTIONS */
+    .section { padding: 80px 48px; }
+    .section.dark-green { background: linear-gradient(135deg, var(--green), #1b4332); color: white; }
+    .section.white { background: white; }
+    .section.cream { background: var(--cream); }
+    .section-tag { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+    .section.dark-green .section-tag { color: var(--green-light); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 42px); font-weight: 700; color: var(--dark); margin-bottom: 14px; }
+    .section.dark-green .section-title { color: white; }
+    .section-desc { font-size: 15px; color: var(--muted); max-width: 520px; line-height: 1.7; margin-bottom: 48px; }
+    .section.dark-green .section-desc { color: rgba(255,255,255,0.7); }
 
-    /* SERVICES */
-    .services-section { background: white; }
-
-    .section-label {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 16px;
-      max-width: 500px;
-    }
-
-    .section-desc { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.7; margin-bottom: 48px; }
-
-    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-    .service-card {
+    /* SERVICES SECTION */
+    .svc-section-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .svc-section-card {
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 28px 24px;
       transition: all 0.3s;
-      cursor: default;
-      position: relative;
-      overflow: hidden;
     }
+    .svc-section-card:hover { border-color: var(--green-light); transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+    .svc-section-icon { font-size: 32px; margin-bottom: 14px; }
+    .svc-section-name { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .svc-section-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .svc-section-price { font-size: 18px; font-weight: 700; color: var(--green); }
 
-    .service-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--green), var(--green-light));
-      transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-
-    .service-card:hover { border-color: var(--green-light); transform: translateY(-4px); box-shadow: var(--shadow); }
-    .service-card:hover::before { transform: scaleX(1); }
-
-    .svc-card-icon { font-size: 32px; margin-bottom: 16px; }
-    .svc-card-name { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
-    .svc-card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
-    .svc-card-price { font-size: 18px; font-weight: 700; color: var(--green); }
-
-    /* TEAM */
-    .team-section { background: var(--cream); }
-    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-    .team-card {
+    /* TEAM SECTION */
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .team-card-section {
       background: white;
       border-radius: 16px;
-      padding: 28px;
+      padding: 24px;
       text-align: center;
       border: 1px solid var(--border);
       transition: all 0.3s;
     }
-
-    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-
-    .team-avatar {
-      width: 72px; height: 72px;
+    .team-card-section:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+    .team-av {
+      width: 64px; height: 64px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 26px; font-weight: 800; color: white;
-      margin: 0 auto 16px;
+      font-size: 20px; font-weight: 800; color: white;
+      margin: 0 auto 14px;
     }
+    .team-name-s { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .team-role { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 6px; }
+    .team-desc { font-size: 11px; color: var(--muted); }
 
-    .team-name { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-    .team-spec { font-size: 13px; color: var(--green); font-weight: 600; margin-bottom: 8px; }
-    .team-exp { font-size: 12px; color: var(--muted); }
-
-    /* WHY US */
-    .why-section {
-      background: linear-gradient(135deg, var(--green) 0%, #1b4332 100%);
-      color: white;
-    }
-
-    .why-section .section-title { color: white; }
-    .why-section .section-desc { color: rgba(255,255,255,0.7); }
-    .why-section .section-label { color: var(--green-light); }
-
-    .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-
+    /* WHY GRID */
+    .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
     .why-card {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.15);
       border-radius: 16px;
       padding: 24px;
-      transition: all 0.3s;
+      transition: all 0.2s;
     }
-
-    .why-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-4px); }
+    .why-card:hover { background: rgba(255,255,255,0.18); }
     .why-icon { font-size: 28px; margin-bottom: 12px; }
-    .why-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .why-title { font-size: 15px; font-weight: 700; color: white; margin-bottom: 8px; }
     .why-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
 
     /* FOOTER */
     footer {
       background: var(--dark);
       color: rgba(255,255,255,0.6);
-      padding: 40px 60px;
+      padding: 36px 48px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
     }
-
-    .footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: white; font-weight: 700; }
-    .footer-contact { text-align: right; line-height: 1.8; }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      nav { padding: 20px 24px; }
-      .nav-links { display: none; }
-      .hero-content { flex-direction: column; padding: 32px 24px; }
-      .booking-card { width: 100%; }
-      section { padding: 60px 24px; }
-      .services-grid, .team-grid { grid-template-columns: 1fr 1fr; }
-      .why-grid { grid-template-columns: 1fr 1fr; }
-      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
-      .footer-contact { text-align: center; }
-    }
-
-    @media (max-width: 560px) {
-      .services-grid, .team-grid, .why-grid { grid-template-columns: 1fr; }
-      .hero-stats { gap: 20px; }
-      .form-row { grid-template-columns: 1fr; }
-    }
+    .footer-name { font-family: 'Playfair Display', serif; font-size: 18px; color: white; font-weight: 700; margin-bottom: 4px; }
+    .footer-contact { text-align: right; line-height: 1.9; }
 
     /* TOAST */
     .toast {
@@ -553,363 +345,330 @@
       padding: 14px 20px;
       border-radius: 12px;
       font-size: 14px;
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
       z-index: 999;
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(8px);
       transition: all 0.3s;
       border-left: 4px solid var(--green-light);
+      pointer-events: none;
     }
     .toast.show { opacity: 1; transform: translateY(0); }
 
-    /* Loading spinner */
     .spinner {
-      width: 20px; height: 20px;
+      width: 18px; height: 18px;
       border: 2px solid rgba(255,255,255,0.3);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       display: inline-block;
       vertical-align: middle;
-      margin-right: 8px;
+      margin-right: 6px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { flex-direction: column; padding: 40px 20px; }
+      .booking-card { width: 100%; }
+      .section { padding: 60px 20px; }
+      .svc-section-grid, .team-grid, .why-grid { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 20px; }
+      .footer-contact { text-align: center; }
+    }
+    @media (max-width: 540px) {
+      .svc-section-grid, .team-grid, .why-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ── HERO ── -->
-<section class="hero" id="home">
-  <nav>
-    <div class="logo">
-      <div class="logo-icon">🏥</div>
-      <div>
-        <div class="logo-text">Stride Sports & Physiotherapy</div>
-        <div class="logo-sub">Sports & Physiotherapy</div>
-      </div>
-    </div>
-    <div class="nav-links">
-      <a href="#services">Services</a>
-      <a href="#team">Our Team</a>
-      <a href="#why">Why Us</a>
-      <a href="#book">Contact</a>
-    </div>
-    <a href="#book" class="nav-cta">Book Now</a>
-  </nav>
+<!-- NAV -->
+<nav>
+  <div>
+    <div class="logo-text">Stride Sports & Physiotherapy</div>
+    <div class="logo-sub">Edmonton, Alberta</div>
+  </div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#team">Our Team</a>
+    <a href="#why">Why Us</a>
+  </div>
+  <a href="#book" class="nav-btn">Book Now</a>
+</nav>
 
-  <div class="hero-content">
-    <div class="hero-blob hero-blob-1"></div>
-    <div class="hero-blob hero-blob-2"></div>
+<!-- HERO -->
+<div class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-badge">⚕️ Trusted Physiotherapy in Edmonton, AB</div>
+    <h1 class="hero-title">Heal Faster,<br>Move <span>Better</span>,<br>Live Stronger</h1>
+    <p class="hero-desc">Edmonton's premier physiotherapy centre with multiple locations. From sports injuries to post-surgery rehab — we get you back to 100%.</p>
+    <div class="hero-stats">
+      <div><div class="stat-num">500+</div><div class="stat-label">Patients Treated</div></div>
+      <div><div class="stat-num">7</div><div class="stat-label">Expert Therapists</div></div>
+      <div><div class="stat-num">6</div><div class="stat-label">Locations</div></div>
+    </div>
+  </div>
 
-    <div class="hero-left">
-      <div class="hero-badge">⚕️ &nbsp; Trusted Physiotherapy in Edmonton, AB</div>
-      <h1 class="hero-title">
-        Heal Faster,<br/>
-        Move <span>Better</span>,<br/>
-        Live Stronger
-      </h1>
-      <p class="hero-desc">
-        Edmonton's premier physiotherapy centre with multiple locations across the city. From sports injuries to post-surgery rehab — we get you back to 100%.
-      </p>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-num">500+</div>
-          <div class="hero-stat-label">Patients Treated</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">6</div>
-          <div class="hero-stat-label">Expert Therapists</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">10+</div>
-          <div class="hero-stat-label">Years Experience</div>
-        </div>
-      </div>
+  <!-- BOOKING WIDGET -->
+  <div class="booking-card" id="book">
+    <div class="booking-title">Book Your Session</div>
+    <div class="booking-sub">Free consultation for first-time patients</div>
+
+    <div class="steps">
+      <div class="step-tab active" id="tab1">1. Service</div>
+      <div class="step-tab" id="tab2">2. Therapist</div>
+      <div class="step-tab" id="tab3">3. Date & Time</div>
+      <div class="step-tab" id="tab4">4. Details</div>
+      <div class="step-tab" id="tab5">✓ Done</div>
     </div>
 
-    <!-- BOOKING FORM -->
-    <div class="booking-card" id="book">
-      <div class="booking-title">Book Your Session</div>
-      <div class="booking-sub">Free consultation for first-time patients</div>
-
-      <div class="steps">
-        <div class="step-tab active" id="tab-1">1. Service</div>
-        <div class="step-tab" id="tab-2">2. Therapist</div>
-        <div class="step-tab" id="tab-3">3. Date & Time</div>
-        <div class="step-tab" id="tab-4">4. Details</div>
-        <div class="step-tab" id="tab-5">✓ Done</div>
-      </div>
-
-      <!-- STEP 1: Service -->
-      <div class="form-step active" id="step-1">
-        <label style="margin-bottom:12px">Choose a service</label>
-        <div class="service-grid" id="service-grid">
-          <div class="service-option" data-service="Initial Assessment" data-price="120" onclick="selectService(this)">
-            <div class="svc-icon">🔍</div>
-            <div class="svc-name">Initial Assessment</div>
-            <div class="svc-price">$120</div>
-          </div>
-          <div class="service-option" data-service="Manual Therapy" data-price="95" onclick="selectService(this)">
-            <div class="svc-icon">🤲</div>
-            <div class="svc-name">Manual Therapy</div>
-            <div class="svc-price">$95</div>
-          </div>
-          <div class="service-option" data-service="Exercise Therapy" data-price="85" onclick="selectService(this)">
-            <div class="svc-icon">🏃</div>
-            <div class="svc-name">Exercise Therapy</div>
-            <div class="svc-price">$85</div>
-          </div>
-          <div class="service-option" data-service="Electrotherapy" data-price="70" onclick="selectService(this)">
-            <div class="svc-icon">⚡</div>
-            <div class="svc-name">Electrotherapy</div>
-            <div class="svc-price">$70</div>
-          </div>
-          <div class="service-option" data-service="Ultrasound Therapy" data-price="60" onclick="selectService(this)">
-            <div class="svc-icon">🔊</div>
-            <div class="svc-name">Ultrasound</div>
-            <div class="svc-price">$60</div>
-          </div>
-          <div class="service-option" data-service="Follow-up Session" data-price="80" onclick="selectService(this)">
-            <div class="svc-icon">📋</div>
-            <div class="svc-name">Follow-up</div>
-            <div class="svc-price">$80</div>
-          </div>
+    <!-- STEP 1 -->
+    <div class="step active" id="step1">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Select a service to get started</p>
+      <div class="svc-grid" id="svcGrid">
+        <div class="svc-card" data-svc="Initial Assessment" data-price="120" onclick="pickService(this)">
+          <div class="svc-icon">🔍</div>
+          <div class="svc-name">Initial Assessment</div>
+          <div class="svc-price">$120</div>
         </div>
-        <button class="btn-next" id="btn-step1" onclick="goStep(2)" disabled>Continue →</button>
-      </div>
-
-      <!-- STEP 2: Therapist -->
-      <div class="form-step" id="step-2">
-        <label style="margin-bottom:12px">Choose your therapist</label>
-        <div class="therapist-grid">
-          <div class="therapist-option" data-therapist="Krunal Patel" data-spec="Physiotherapist | Owner" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#00c9a7,#00876a)">KP</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Krunal Patel</div>
-              <div class="therapist-spec">Physiotherapist | Owner</div>
-            </div>
-          </div>
-          <div class="therapist-option" data-therapist="Ritesh Nayak" data-spec="Physiotherapist | Owner" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#58a6ff,#0066cc)">RN</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Ritesh Nayak</div>
-              <div class="therapist-spec">Physiotherapist | Owner</div>
-            </div>
-          </div>
-          <div class="therapist-option" data-therapist="Harsh Shah" data-spec="Physiotherapist | Owner" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#d29922,#a07010)">HS</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Harsh Shah</div>
-              <div class="therapist-spec">Physiotherapist | Owner</div>
-            </div>
-          </div>
-          <div class="therapist-option" data-therapist="Ruchika Ray" data-spec="Physiotherapist | Partner" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#f85149,#b03030)">RR</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Ruchika Ray</div>
-              <div class="therapist-spec">Physiotherapist | Partner</div>
-            </div>
-          </div>
-          <div class="therapist-option" data-therapist="Krishna Bhatt" data-spec="Physiotherapist | Partner" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#a5d6ff,#5090c0)">KB</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Krishna Bhatt</div>
-              <div class="therapist-spec">Physiotherapist | Partner</div>
-            </div>
-          </div>
-          <div class="therapist-option" data-therapist="Hajar Ghaderiniri" data-spec="Physiotherapist" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#3fb950,#1a7a30)">HG</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Hajar Ghaderiniri</div>
-              <div class="therapist-spec">Physiotherapist</div>
-            </div>
-          </div>
-          <div class="therapist-option" data-therapist="Gayatri Trivedi" data-spec="Physiotherapist" onclick="selectTherapist(this)">
-            <div class="therapist-av" style="background:linear-gradient(135deg,#c084fc,#7e22ce)">GT</div>
-            <div class="therapist-info">
-              <div class="therapist-name">Gayatri Trivedi</div>
-              <div class="therapist-spec">Physiotherapist</div>
-            </div>
-          </div>
+        <div class="svc-card" data-svc="Manual Therapy" data-price="95" onclick="pickService(this)">
+          <div class="svc-icon">🤲</div>
+          <div class="svc-name">Manual Therapy</div>
+          <div class="svc-price">$95</div>
         </div>
-        <button class="btn-next" id="btn-step2" onclick="goStep(3)" disabled style="margin-top:12px">Continue →</button>
-        <button class="btn-back" onclick="goStep(1)">← Back</button>
+        <div class="svc-card" data-svc="Exercise Therapy" data-price="85" onclick="pickService(this)">
+          <div class="svc-icon">🏃</div>
+          <div class="svc-name">Exercise Therapy</div>
+          <div class="svc-price">$85</div>
+        </div>
+        <div class="svc-card" data-svc="Electrotherapy" data-price="70" onclick="pickService(this)">
+          <div class="svc-icon">⚡</div>
+          <div class="svc-name">Electrotherapy</div>
+          <div class="svc-price">$70</div>
+        </div>
+        <div class="svc-card" data-svc="Ultrasound Therapy" data-price="60" onclick="pickService(this)">
+          <div class="svc-icon">🔊</div>
+          <div class="svc-name">Ultrasound Therapy</div>
+          <div class="svc-price">$60</div>
+        </div>
+        <div class="svc-card" data-svc="Follow-up Session" data-price="80" onclick="pickService(this)">
+          <div class="svc-icon">📋</div>
+          <div class="svc-name">Follow-up Session</div>
+          <div class="svc-price">$80</div>
+        </div>
       </div>
+      <button class="btn-primary" id="btnStep1" onclick="goTo(2)" disabled>Continue →</button>
+    </div>
 
-      <!-- STEP 3: Date & Time -->
-      <div class="form-step" id="step-3">
+    <!-- STEP 2 -->
+    <div class="step" id="step2">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Choose your preferred therapist</p>
+      <div class="therapist-list" id="therapistList">
+        <div class="therapist-card" data-name="Krunal Patel" data-role="Physiotherapist | Owner" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#00c9a7,#00876a)">KP</div>
+          <div><div class="t-name">Krunal Patel</div><div class="t-spec">Physiotherapist | Owner</div></div>
+        </div>
+        <div class="therapist-card" data-name="Ritesh Nayak" data-role="Physiotherapist | Owner" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#58a6ff,#0066cc)">RN</div>
+          <div><div class="t-name">Ritesh Nayak</div><div class="t-spec">Physiotherapist | Owner</div></div>
+        </div>
+        <div class="therapist-card" data-name="Harsh Shah" data-role="Physiotherapist | Owner" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#d29922,#a07010)">HS</div>
+          <div><div class="t-name">Harsh Shah</div><div class="t-spec">Physiotherapist | Owner</div></div>
+        </div>
+        <div class="therapist-card" data-name="Ruchika Ray" data-role="Physiotherapist | Partner" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#f85149,#b03030)">RR</div>
+          <div><div class="t-name">Ruchika Ray</div><div class="t-spec">Physiotherapist | Partner</div></div>
+        </div>
+        <div class="therapist-card" data-name="Krishna Bhatt" data-role="Physiotherapist | Partner" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#a5d6ff,#4a90d9)">KB</div>
+          <div><div class="t-name">Krishna Bhatt</div><div class="t-spec">Physiotherapist | Partner</div></div>
+        </div>
+        <div class="therapist-card" data-name="Hajar Ghaderiniri" data-role="Physiotherapist" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#3fb950,#1a7a30)">HG</div>
+          <div><div class="t-name">Hajar Ghaderiniri</div><div class="t-spec">Physiotherapist</div></div>
+        </div>
+        <div class="therapist-card" data-name="Gayatri Trivedi" data-role="Physiotherapist" onclick="pickTherapist(this)">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#c084fc,#7e22ce)">GT</div>
+          <div><div class="t-name">Gayatri Trivedi</div><div class="t-spec">Physiotherapist</div></div>
+        </div>
+      </div>
+      <button class="btn-primary" id="btnStep2" onclick="goTo(3)" disabled>Continue →</button>
+      <button class="btn-back" onclick="goTo(1)">← Back</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3">
+      <div class="form-group">
+        <label>Select Date</label>
+        <input type="date" id="aptDate" onchange="showSlots()" />
+      </div>
+      <div id="slotsSection" style="display:none">
+        <label style="display:block;font-size:12px;font-weight:600;margin-bottom:10px">Available Time Slots</label>
+        <div class="slot-grid" id="slotGrid"></div>
+      </div>
+      <button class="btn-primary" id="btnStep3" onclick="goTo(4)" disabled>Continue →</button>
+      <button class="btn-back" onclick="goTo(2)">← Back</button>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step4">
+      <div class="form-row">
         <div class="form-group">
-          <label>Select Date</label>
-          <input type="date" id="apt-date" min="" onchange="loadSlots()" />
-        </div>
-        <div id="slots-wrap" style="display:none">
-          <label style="margin-bottom:10px">Available Time Slots</label>
-          <div class="slot-grid" id="slot-grid"></div>
-        </div>
-        <button class="btn-next" id="btn-step3" onclick="goStep(4)" disabled style="margin-top:16px">Continue →</button>
-        <button class="btn-back" onclick="goStep(2)">← Back</button>
-      </div>
-
-      <!-- STEP 4: Patient Details -->
-      <div class="form-step" id="step-4">
-        <div class="form-row">
-          <div class="form-group">
-            <label>First Name *</label>
-            <input type="text" id="p-fname" placeholder="Your name" />
-          </div>
-          <div class="form-group">
-            <label>Last Name *</label>
-            <input type="text" id="p-lname" placeholder="Last name" />
-          </div>
+          <label>First Name *</label>
+          <input type="text" id="fname" placeholder="First name" />
         </div>
         <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="p-phone" placeholder="10-digit mobile number" maxlength="10" />
+          <label>Last Name *</label>
+          <input type="text" id="lname" placeholder="Last name" />
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="p-email" placeholder="your@email.com" />
-        </div>
-        <div class="form-group">
-          <label>Brief description of your condition</label>
-          <textarea id="p-condition" placeholder="e.g. Lower back pain, knee injury after sports..." rows="3"></textarea>
-        </div>
-
-        <!-- Confirmation summary -->
-        <div style="background:var(--green-pale);border-radius:12px;padding:14px 16px;margin-top:4px;margin-bottom:4px">
-          <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Booking Summary</div>
-          <div class="confirm-row"><span class="confirm-label">Service</span><span class="confirm-val" id="sum-service">—</span></div>
-          <div class="confirm-row"><span class="confirm-label">Therapist</span><span class="confirm-val" id="sum-therapist">—</span></div>
-          <div class="confirm-row"><span class="confirm-label">Date & Time</span><span class="confirm-val" id="sum-datetime">—</span></div>
-          <div class="confirm-row"><span class="confirm-label">Fee</span><span class="confirm-val" id="sum-price" style="color:var(--green)">—</span></div>
-        </div>
-
-        <button class="btn-next" id="btn-submit" onclick="submitBooking()">Confirm Booking ✓</button>
-        <button class="btn-back" onclick="goStep(3)">← Back</button>
       </div>
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input type="tel" id="phone" placeholder="e.g. 780-851-7552" />
+      </div>
+      <div class="form-group">
+        <label>Email (optional)</label>
+        <input type="email" id="email" placeholder="your@email.com" />
+      </div>
+      <div class="form-group">
+        <label>Describe your condition (optional)</label>
+        <textarea id="condition" rows="2" placeholder="e.g. Lower back pain, knee injury..."></textarea>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Booking Summary</div>
+        <div class="summary-row"><span class="summary-key">Service</span><span class="summary-val" id="sumSvc">—</span></div>
+        <div class="summary-row"><span class="summary-key">Therapist</span><span class="summary-val" id="sumTherapist">—</span></div>
+        <div class="summary-row"><span class="summary-key">Date & Time</span><span class="summary-val" id="sumDateTime">—</span></div>
+        <div class="summary-row"><span class="summary-key">Fee</span><span class="summary-val" id="sumPrice" style="color:var(--green)">—</span></div>
+      </div>
+      <button class="btn-primary" id="btnSubmit" onclick="submitBooking()">Confirm Booking ✓</button>
+      <button class="btn-back" onclick="goTo(3)">← Back</button>
+    </div>
 
-      <!-- STEP 5: Success -->
-      <div class="form-step" id="step-5">
-        <div class="success-screen">
-          <div class="success-icon">✅</div>
-          <div class="success-title">Booking Confirmed!</div>
-          <p class="success-msg">Your appointment has been successfully booked. The clinic team will call you to confirm within 1 hour.</p>
-          <div class="booking-ref" id="booking-ref">SPC-000000</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Save this reference number for your records</div>
-          <button class="btn-next" onclick="resetForm()">Book Another Appointment</button>
-        </div>
+    <!-- STEP 5 SUCCESS -->
+    <div class="step" id="step5">
+      <div class="success-wrap">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Booking Confirmed!</div>
+        <p class="success-msg">Your appointment has been successfully booked. The clinic team will call you to confirm within 1 hour.</p>
+        <div class="ref-box" id="refBox">SSP-000000</div>
+        <div class="ref-hint">Save this reference number for your records</div>
+        <button class="btn-primary" onclick="resetAll()">Book Another Appointment</button>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── SERVICES ── -->
-<section class="services-section" id="services">
-  <div class="section-label">What We Offer</div>
+<!-- SERVICES SECTION -->
+<div class="section white" id="services">
+  <div class="section-tag">What We Offer</div>
   <div class="section-title">Comprehensive Physiotherapy Services</div>
   <p class="section-desc">From acute injuries to chronic conditions, our expert therapists provide personalised treatment plans to get you back to your best.</p>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="svc-card-icon">🔍</div>
-      <div class="svc-card-name">Initial Assessment</div>
-      <div class="svc-card-desc">Thorough evaluation of your condition, medical history, and movement analysis to create your personalised treatment plan.</div>
-      <div class="svc-card-price">$120</div>
+  <div class="svc-section-grid">
+    <div class="svc-section-card">
+      <div class="svc-section-icon">🔍</div>
+      <div class="svc-section-name">Initial Assessment</div>
+      <div class="svc-section-desc">Thorough evaluation of your condition, medical history, and movement analysis to create your personalised treatment plan.</div>
+      <div class="svc-section-price">$120</div>
     </div>
-    <div class="service-card">
-      <div class="svc-card-icon">🤲</div>
-      <div class="svc-card-name">Manual Therapy</div>
-      <div class="svc-card-desc">Hands-on techniques including joint mobilisation, soft tissue massage, and manipulation to relieve pain and restore movement.</div>
-      <div class="svc-card-price">$95</div>
+    <div class="svc-section-card">
+      <div class="svc-section-icon">🤲</div>
+      <div class="svc-section-name">Manual Therapy</div>
+      <div class="svc-section-desc">Hands-on techniques including joint mobilisation, soft tissue massage, and manipulation to relieve pain and restore movement.</div>
+      <div class="svc-section-price">$95</div>
     </div>
-    <div class="service-card">
-      <div class="svc-card-icon">🏃</div>
-      <div class="svc-card-name">Exercise Therapy</div>
-      <div class="svc-card-desc">Customised exercise programs to strengthen muscles, improve flexibility, and prevent future injuries.</div>
-      <div class="svc-card-price">$85</div>
+    <div class="svc-section-card">
+      <div class="svc-section-icon">🏃</div>
+      <div class="svc-section-name">Exercise Therapy</div>
+      <div class="svc-section-desc">Customised exercise programs to strengthen muscles, improve flexibility, and prevent future injuries.</div>
+      <div class="svc-section-price">$85</div>
     </div>
-    <div class="service-card">
-      <div class="svc-card-icon">⚡</div>
-      <div class="svc-card-name">Electrotherapy</div>
-      <div class="svc-card-desc">Advanced electrical stimulation treatments including TENS, IFT, and EMS to reduce pain and accelerate healing.</div>
-      <div class="svc-card-price">$70</div>
+    <div class="svc-section-card">
+      <div class="svc-section-icon">⚡</div>
+      <div class="svc-section-name">Electrotherapy</div>
+      <div class="svc-section-desc">Advanced electrical stimulation treatments including TENS, IFT, and EMS to reduce pain and accelerate healing.</div>
+      <div class="svc-section-price">$70</div>
     </div>
-    <div class="service-card">
-      <div class="svc-card-icon">🔊</div>
-      <div class="svc-card-name">Ultrasound Therapy</div>
-      <div class="svc-card-desc">Deep tissue ultrasound treatment to reduce inflammation, break down scar tissue, and promote healing.</div>
-      <div class="svc-card-price">$60</div>
+    <div class="svc-section-card">
+      <div class="svc-section-icon">🔊</div>
+      <div class="svc-section-name">Ultrasound Therapy</div>
+      <div class="svc-section-desc">Deep tissue ultrasound treatment to reduce inflammation, break down scar tissue, and promote healing.</div>
+      <div class="svc-section-price">$60</div>
     </div>
-    <div class="service-card">
-      <div class="svc-card-icon">🏠</div>
-      <div class="svc-card-name">Home Visit</div>
-      <div class="svc-card-desc">Physiotherapy at your home for patients who are unable to travel. Full treatment in the comfort of your home.</div>
-      <div class="svc-card-price">$180</div>
+    <div class="svc-section-card">
+      <div class="svc-section-icon">🏠</div>
+      <div class="svc-section-name">Home Visit</div>
+      <div class="svc-section-desc">Physiotherapy at your home for patients who are unable to travel. Full treatment in the comfort of your home.</div>
+      <div class="svc-section-price">$180</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── TEAM ── -->
-<section class="team-section" id="team">
-  <div class="section-label">Meet The Team</div>
+<!-- TEAM SECTION -->
+<div class="section cream" id="team">
+  <div class="section-tag">Meet The Team</div>
   <div class="section-title">Our Expert Therapists</div>
-  <p class="section-desc">Each of our physiotherapists is a certified specialist with years of clinical experience and a passion for helping patients recover.</p>
+  <p class="section-desc">Registered with the College of Physical Therapists of Alberta, our team brings decades of combined experience to every patient.</p>
   <div class="team-grid">
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#00c9a7,#00876a)">KP</div>
-      <div class="team-name">Krunal Patel</div>
-      <div class="team-spec">Physiotherapist | Owner</div>
-      <div class="team-exp">Sports & Orthopedic Physiotherapy</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#00c9a7,#00876a)">KP</div>
+      <div class="team-name-s">Krunal Patel</div>
+      <div class="team-role">Physiotherapist | Owner</div>
+      <div class="team-desc">Sports & Orthopedic Physiotherapy</div>
     </div>
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#58a6ff,#0066cc)">RN</div>
-      <div class="team-name">Ritesh Nayak</div>
-      <div class="team-spec">Physiotherapist | Owner</div>
-      <div class="team-exp">Sports & Rehabilitation</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#58a6ff,#0066cc)">RN</div>
+      <div class="team-name-s">Ritesh Nayak</div>
+      <div class="team-role">Physiotherapist | Owner</div>
+      <div class="team-desc">Sports & Rehabilitation</div>
     </div>
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#d29922,#a07010)">HS</div>
-      <div class="team-name">Harsh Shah</div>
-      <div class="team-spec">Physiotherapist | Owner</div>
-      <div class="team-exp">Manual & Sports Therapy</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#d29922,#a07010)">HS</div>
+      <div class="team-name-s">Harsh Shah</div>
+      <div class="team-role">Physiotherapist | Owner</div>
+      <div class="team-desc">Manual & Sports Therapy</div>
     </div>
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#f85149,#b03030)">RR</div>
-      <div class="team-name">Ruchika Ray</div>
-      <div class="team-spec">Physiotherapist | Partner</div>
-      <div class="team-exp">Neurological & Pelvic Physio</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#f85149,#b03030)">RR</div>
+      <div class="team-name-s">Ruchika Ray</div>
+      <div class="team-role">Physiotherapist | Partner</div>
+      <div class="team-desc">Neurological & Pelvic Physio</div>
     </div>
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#a5d6ff,#5090c0)">KB</div>
-      <div class="team-name">Krishna Bhatt</div>
-      <div class="team-spec">Physiotherapist | Partner</div>
-      <div class="team-exp">Orthopedic & Geriatric Physio</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#a5d6ff,#4a90d9)">KB</div>
+      <div class="team-name-s">Krishna Bhatt</div>
+      <div class="team-role">Physiotherapist | Partner</div>
+      <div class="team-desc">Orthopedic & Geriatric Physio</div>
     </div>
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#3fb950,#1a7a30)">HG</div>
-      <div class="team-name">Hajar Ghaderiniri</div>
-      <div class="team-spec">Physiotherapist</div>
-      <div class="team-exp">General Physiotherapy</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#3fb950,#1a7a30)">HG</div>
+      <div class="team-name-s">Hajar Ghaderiniri</div>
+      <div class="team-role">Physiotherapist</div>
+      <div class="team-desc">General Physiotherapy</div>
     </div>
-    <div class="team-card">
-      <div class="team-avatar" style="background:linear-gradient(135deg,#c084fc,#7e22ce)">GT</div>
-      <div class="team-name">Gayatri Trivedi</div>
-      <div class="team-spec">Physiotherapist</div>
-      <div class="team-exp">General Physiotherapy</div>
+    <div class="team-card-section">
+      <div class="team-av" style="background:linear-gradient(135deg,#c084fc,#7e22ce)">GT</div>
+      <div class="team-name-s">Gayatri Trivedi</div>
+      <div class="team-role">Physiotherapist</div>
+      <div class="team-desc">General Physiotherapy</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── WHY US ── -->
-<section class="why-section" id="why">
-  <div class="section-label">Why Choose Us</div>
+<!-- WHY US -->
+<div class="section dark-green" id="why">
+  <div class="section-tag">Why Choose Us</div>
   <div class="section-title">The Stride Sports Difference</div>
   <p class="section-desc">We're not just another clinic — we're your partners in recovery, every step of the way.</p>
   <div class="why-grid">
     <div class="why-card">
       <div class="why-icon">🏆</div>
       <div class="why-title">Certified Specialists</div>
-      <div class="why-desc">All our therapists hold MPT degrees and are registered with the Indian Association of Physiotherapists.</div>
+      <div class="why-desc">All therapists are registered with the College of Physical Therapists of Alberta.</div>
     </div>
     <div class="why-card">
       <div class="why-icon">📅</div>
@@ -917,9 +676,9 @@
       <div class="why-desc">Book your appointment anytime, 24/7, directly from our website. No calls, no waiting.</div>
     </div>
     <div class="why-card">
-      <div class="why-icon">⚡</div>
-      <div class="why-title">Advanced Equipment</div>
-      <div class="why-desc">State-of-the-art physiotherapy equipment including ultrasound, laser therapy, and custom orthotics.</div>
+      <div class="why-icon">📍</div>
+      <div class="why-title">6 Locations</div>
+      <div class="why-desc">Brintnell, Capilano, Crystallina, Jagare Ridge, Heritage Valley & Winterburn.</div>
     </div>
     <div class="why-card">
       <div class="why-icon">❤️</div>
@@ -927,182 +686,179 @@
       <div class="why-desc">Every patient gets a customised treatment plan. We treat the person, not just the condition.</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer>
   <div>
-    <div class="footer-logo">Stride Sports & Physiotherapy</div>
-    <div style="margin-top:6px">© 2026 Stride Sports & Physiotherapy. All rights reserved.</div>
+    <div class="footer-name">Stride Sports & Physiotherapy</div>
+    <div>© 2026 Stride Sports & Physiotherapy. All rights reserved.</div>
   </div>
   <div class="footer-contact">
     <div>📍 Edmonton, Alberta, Canada</div>
     <div>📞 +1 780-851-7552</div>
-    <div>✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afc7cac3c3c0efdcdaddcedbdfc7d6dcc6c081c6c1">[email&#160;protected]</a></div>
+    <div>🌐 stridesportsphysio.ca</div>
   </div>
 </footer>
 
-<!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ── CONFIG — PASTE YOUR SUPABASE DETAILS HERE ──
+<script>
+  // ── Supabase ──
   const SUPABASE_URL = 'https://ufcwpccebgmisnwcmqkn.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_zgqp-l-yyd7sjBifU9Jolg_H_t99K_n';
-  // ────────────────────────────────────────────────
+  let db = null;
+  try { db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e) { console.warn('Supabase init failed', e); }
 
-  let supabaseClient = null;
-  try {
-    if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    }
-  } catch(e) {}
-
-  // Set min date to today
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('apt-date').min = today;
-  document.getElementById('apt-date').value = today;
-
-  // State
-  let state = { service: '', price: 0, therapist: '', spec: '', date: '', time: '', step: 1 };
+  // ── State ──
+  let S = { svc: '', price: 0, therapist: '', date: '', time: '' };
 
   const SLOTS = ['09:00','09:45','10:30','11:15','12:00','14:00','14:45','15:30','16:15','17:00','17:45'];
 
-  function goStep(n) {
-    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.step-tab').forEach((t,i) => {
-      t.classList.remove('active','done');
-      if (i+1 < n) t.classList.add('done');
-      if (i+1 === n) t.classList.add('active');
-    });
-    document.getElementById('step-' + n).classList.add('active');
-    state.step = n;
+  // Set min date to today
+  const todayStr = new Date().toISOString().slice(0,10);
+  document.getElementById('aptDate').min = todayStr;
+  document.getElementById('aptDate').value = todayStr;
 
-    if (n === 4) updateSummary();
+  // ── Navigation ──
+  function goTo(n) {
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('step' + i).classList.remove('active');
+      const tab = document.getElementById('tab' + i);
+      tab.classList.remove('active', 'done');
+      if (i < n) tab.classList.add('done');
+      if (i === n) tab.classList.add('active');
+    }
+    document.getElementById('step' + n).classList.add('active');
+    if (n === 4) fillSummary();
   }
 
-  function selectService(el) {
-    document.querySelectorAll('.service-option').forEach(o => o.classList.remove('selected'));
+  // ── Step 1: Service ──
+  function pickService(el) {
+    document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
-    state.service = el.dataset.service;
-    state.price = parseInt(el.dataset.price);
-    document.getElementById('btn-step1').disabled = false;
+    S.svc = el.dataset.svc;
+    S.price = parseInt(el.dataset.price);
+    document.getElementById('btnStep1').disabled = false;
   }
 
-  function selectTherapist(el) {
-    document.querySelectorAll('.therapist-option').forEach(o => o.classList.remove('selected'));
+  // ── Step 2: Therapist ──
+  function pickTherapist(el) {
+    document.querySelectorAll('.therapist-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
-    state.therapist = el.dataset.therapist;
-    state.spec = el.dataset.spec;
-    document.getElementById('btn-step2').disabled = false;
+    S.therapist = el.dataset.name;
+    document.getElementById('btnStep2').disabled = false;
   }
 
-  function loadSlots() {
-    state.date = document.getElementById('apt-date').value;
-    state.time = '';
-    document.getElementById('btn-step3').disabled = true;
-
-    const grid = document.getElementById('slot-grid');
+  // ── Step 3: Slots ──
+  function showSlots() {
+    S.date = document.getElementById('aptDate').value;
+    S.time = '';
+    document.getElementById('btnStep3').disabled = true;
+    const grid = document.getElementById('slotGrid');
     grid.innerHTML = '';
-    document.getElementById('slots-wrap').style.display = 'block';
-
     SLOTS.forEach(t => {
-      const div = document.createElement('div');
-      div.className = 'slot';
-      div.textContent = t;
-      div.onclick = () => selectSlot(div, t);
-      grid.appendChild(div);
+      const d = document.createElement('div');
+      d.className = 'slot';
+      d.textContent = t;
+      d.onclick = () => pickSlot(d, t);
+      grid.appendChild(d);
     });
+    document.getElementById('slotsSection').style.display = 'block';
   }
 
-  function selectSlot(el, time) {
+  function pickSlot(el, time) {
     document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
     el.classList.add('selected');
-    state.time = time;
-    document.getElementById('btn-step3').disabled = false;
+    S.time = time;
+    document.getElementById('btnStep3').disabled = false;
   }
 
-  function updateSummary() {
-    document.getElementById('sum-service').textContent = state.service;
-    document.getElementById('sum-therapist').textContent = state.therapist;
-    document.getElementById('sum-datetime').textContent = state.date + ' at ' + state.time;
-    document.getElementById('sum-price').textContent = '₹' + state.price.toLocaleString('en-IN');
+  // ── Step 4: Summary ──
+  function fillSummary() {
+    document.getElementById('sumSvc').textContent = S.svc;
+    document.getElementById('sumTherapist').textContent = S.therapist;
+    document.getElementById('sumDateTime').textContent = S.date + ' at ' + S.time;
+    document.getElementById('sumPrice').textContent = '$' + S.price;
   }
 
+  // ── Submit ──
   async function submitBooking() {
-    const fname = document.getElementById('p-fname').value.trim();
-    const lname = document.getElementById('p-lname').value.trim();
-    const phone = document.getElementById('p-phone').value.trim();
-    const email = document.getElementById('p-email').value.trim();
-    const condition = document.getElementById('p-condition').value.trim();
+    const fname = document.getElementById('fname').value.trim();
+    const lname = document.getElementById('lname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const condition = document.getElementById('condition').value.trim();
 
-    if (!fname || !lname || !phone) { showToast('⚠️ Please fill in your name and phone number'); return; }
-    if (phone.length !== 10) { showToast('⚠️ Please enter a valid 10-digit phone number'); return; }
+    if (!fname) { toast('⚠️ Please enter your first name'); return; }
+    if (!lname) { toast('⚠️ Please enter your last name'); return; }
+    if (!phone) { toast('⚠️ Please enter your phone number'); return; }
 
-    const btn = document.getElementById('btn-submit');
-    btn.innerHTML = '<span class="spinner"></span> Booking...';
+    const btn = document.getElementById('btnSubmit');
+    btn.innerHTML = '<span class="spinner"></span>Booking...';
     btn.disabled = true;
 
-    const refId = 'SPC-' + Math.random().toString(36).toUpperCase().slice(2, 8);
+    const ref = 'SSP-' + Math.random().toString(36).toUpperCase().slice(2,8);
+
     const booking = {
       patient_name: fname + ' ' + lname,
-      phone,
-      email,
-      condition,
-      service: state.service,
-      therapist: state.therapist,
-      date: state.date,
-      time: state.time,
-      amount: state.price,
+      phone: phone,
+      email: email || null,
+      condition: condition || null,
+      service: S.svc,
+      therapist: S.therapist,
+      date: S.date,
+      time: S.time,
+      amount: S.price,
       status: 'Scheduled',
-      reference: refId,
-      created_at: new Date().toISOString(),
+      reference: ref,
       source: 'website'
     };
 
     try {
-      if (supabaseClient) {
-        // Save to Supabase → dashboard will see this instantly
-        const { error } = await supabaseClient.from('bookings').insert([booking]);
-        if (error) throw error;
+      if (db) {
+        const { error } = await db.from('bookings').insert([booking]);
+        if (error) console.error('Supabase error:', error);
       }
-      // Show success even in demo mode (no Supabase)
-      document.getElementById('booking-ref').textContent = refId;
-      goStep(5);
-      showToast('🎉 Booking confirmed!');
-    } catch(err) {
-      console.error(err);
-      // Still show success to user - save failed silently
-      document.getElementById('booking-ref').textContent = refId;
-      goStep(5);
+    } catch(e) {
+      console.error('Booking save error:', e);
     }
+
+    document.getElementById('refBox').textContent = ref;
+    goTo(5);
+    toast('🎉 Booking confirmed!');
 
     btn.innerHTML = 'Confirm Booking ✓';
     btn.disabled = false;
   }
 
-  function resetForm() {
-    state = { service:'', price:0, therapist:'', spec:'', date:'', time:'', step:1 };
-    document.querySelectorAll('.service-option,.therapist-option,.slot').forEach(el => el.classList.remove('selected'));
-    document.getElementById('p-fname').value = '';
-    document.getElementById('p-lname').value = '';
-    document.getElementById('p-phone').value = '';
-    document.getElementById('p-email').value = '';
-    document.getElementById('p-condition').value = '';
-    document.getElementById('apt-date').value = today;
-    document.getElementById('slots-wrap').style.display = 'none';
-    document.getElementById('btn-step1').disabled = true;
-    document.getElementById('btn-step2').disabled = true;
-    document.getElementById('btn-step3').disabled = true;
-    goStep(1);
+  // ── Reset ──
+  function resetAll() {
+    S = { svc: '', price: 0, therapist: '', date: '', time: '' };
+    document.querySelectorAll('.svc-card, .therapist-card, .slot').forEach(el => el.classList.remove('selected'));
+    document.getElementById('fname').value = '';
+    document.getElementById('lname').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('condition').value = '';
+    document.getElementById('aptDate').value = todayStr;
+    document.getElementById('slotsSection').style.display = 'none';
+    document.getElementById('btnStep1').disabled = true;
+    document.getElementById('btnStep2').disabled = true;
+    document.getElementById('btnStep3').disabled = true;
+    goTo(1);
   }
 
-  function showToast(msg) {
+  // ── Toast ──
+  function toast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    setTimeout(() => t.classList.remove('show'), 3500);
   }
 
-  // Smooth scroll for nav links
-  document.querySelectorAl
+  // Show slots on load for today
+  showSlots();
+</script>
+</body>
+</html>
